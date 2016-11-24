@@ -55,6 +55,8 @@ function htmlToElement(rawHtml, opts, done) {
         var linkPressHandler = null
         if (node.name == 'a' && node.attribs && node.attribs.href) {
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href))
+        } else {
+          linkPressHandler = opts.pressEvents && opts.pressEvents[node.name];
         }
 
         return (
