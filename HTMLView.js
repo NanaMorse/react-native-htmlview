@@ -1,14 +1,13 @@
-import React, {Component, PropTypes} from 'react'
-import htmlToElement from './htmlToElement'
-import {
-  Linking,
-  StyleSheet,
-  Text,
-} from 'react-native'
+import * as React from 'react';
+import { Linking, StyleSheet, Text } from 'react-native';
+import htmlToElement from './htmlToElement';
 
-const boldStyle = {fontWeight: '500'}
-const italicStyle = {fontStyle: 'italic'}
-const codeStyle = {fontFamily: 'Menlo'}
+const { Component, PropTypes } = React;
+
+const boldStyle = {fontWeight: '500'};
+const italicStyle = {fontStyle: 'italic'};
+const codeStyle = {fontFamily: 'Menlo'};
+const linkStyle = {fontWeight: '500', color: '#007AFF'};
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -17,22 +16,19 @@ const baseStyles = StyleSheet.create({
   em: italicStyle,
   pre: codeStyle,
   code: codeStyle,
-  a: {
-    fontWeight: '500',
-    color: '#007AFF',
-  },
-})
+  a: linkStyle,
+});
 
-class HtmlView extends Component {
+class HTMLView extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       element: null,
     }
   }
 
   componentDidMount() {
-    this.mounted = true
+    this.mounted = true;
     this.startHtmlRender(this.props.value)
   }
 
@@ -52,10 +48,9 @@ class HtmlView extends Component {
     }
 
     const opts = {
-      linkHandler: this.props.onLinkPress,
-      styles: Object.assign({}, baseStyles, this.props.stylesheet),
-      customRenderer: this.props.renderNode,
-    }
+      ...this.props,
+      stylesheet: Object.assign({}, baseStyles, this.props.stylesheet),
+    };
 
     htmlToElement(value, opts, (err, element) => {
       if (err) {
@@ -76,17 +71,17 @@ class HtmlView extends Component {
   }
 }
 
-HtmlView.propTypes = {
+HTMLView.propTypes = {
   value: PropTypes.string,
   stylesheet: PropTypes.object,
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
   renderNode: PropTypes.func,
-}
+};
 
-HtmlView.defaultProps = {
+HTMLView.defaultProps = {
   onLinkPress: url => Linking.openURL(url),
   onError: console.error.bind(console),
-}
+};
 
-export default HtmlView
+export default HTMLView
